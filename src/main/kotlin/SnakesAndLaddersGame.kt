@@ -8,6 +8,8 @@ class SnakesAndLaddersGame(
     internal val ladders: List<Tunnel>
     internal val snakes: List<Tunnel>
     internal val players: List<Player>
+    internal val moves: MutableList<Move>
+    private var nextPlayerIndex = 0
 
     init {
         if (numPlayers < 1) throw IllegalArgumentException("should have at least 1 player")
@@ -19,5 +21,15 @@ class SnakesAndLaddersGame(
         this.ladders = tunnels.filter { it.type == TunnelType.LADDER }
         this.snakes = tunnels.filter { it.type == TunnelType.SNAKE }
         this.players = Player.make(numPlayers)
+        this.moves = mutableListOf()
     }
+
+    fun nextMove() {
+        val player = players[nextPlayerIndex]
+        val move = Move(player)
+        player.advance(move.rolledNumber)
+        moves += move
+        if (nextPlayerIndex == numPlayers - 1) nextPlayerIndex = 0 else nextPlayerIndex++
+    }
+
 }

@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 internal class SnakesAndLaddersGameTest {
     @Test
@@ -50,5 +51,26 @@ internal class SnakesAndLaddersGameTest {
         val game = SnakesAndLaddersGame(100, 2, 3, 2)
         assertEquals(game.ladders.size, 2)
         assertEquals(game.snakes.size, 3)
+    }
+
+    @Test
+    internal fun `should advance the game`() {
+        val game = SnakesAndLaddersGame(100, 2, 5, 2)
+        assertEquals(game.moves.size, 0)
+
+        game.nextMove()
+
+        assertEquals(game.moves.size, 1)
+
+        val move = game.moves[0]
+        assertEquals(move.player, Player("Player 1"))
+        assertTrue(move.rolledNumber in 1..6)
+        assertEquals(game.players[0].currentPosition, move.rolledNumber + 1)
+
+        game.nextMove()
+        assertEquals(game.moves[1].player, Player("Player 2"))
+
+        game.nextMove()
+        assertEquals(game.moves[2].player, Player("Player 1"))
     }
 }
