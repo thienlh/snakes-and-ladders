@@ -25,13 +25,10 @@ internal class TunnelTest {
 
     @Test
     internal fun `should never have snake head and ladder bottom at the same square`() {
-        // try random for 10 time to make sure the error will appear if any
-        for (i in 1..10) {
-            val tunnels = Tunnel.make(100, 100, 1000)
-            val ladderBottoms = tunnels.filter { it.type == TunnelType.LADDER }.map { it.end }
-            val snakeHeads = tunnels.filter { it.type == TunnelType.SNAKE }.map { it.start }
+        val tunnels = Tunnel.make(1000, 1000, 10000)
+        val ladderBottoms = tunnels.filter { it.type == TunnelType.LADDER }.map { it.start }
+        val snakeHeads = tunnels.filter { it.type == TunnelType.SNAKE }.map { it.start }
 
-            assertTrue(Collections.disjoint(ladderBottoms, snakeHeads))
-        }
+        assertTrue(Collections.disjoint(ladderBottoms, snakeHeads))
     }
 }

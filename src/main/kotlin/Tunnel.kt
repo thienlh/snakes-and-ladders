@@ -11,25 +11,25 @@ data class Tunnel(internal val start: Int, internal val end: Int) {
             val occupiedSquares = mutableSetOf<Int>()
 
             for (i in 0 until numLadders) {
-                val start = Random.nextInt(2 until limit - 1)
-                var end = Random.nextInt(start + 1 until limit)
-                while (occupiedSquares.contains(end)) {
-                    end = Random.nextInt(start + 1 until limit)
+                var bottom = Random.nextInt(2 until limit - 1)
+                while (occupiedSquares.contains(bottom)) {
+                    bottom = Random.nextInt(2 until limit - 1)
                 }
-                tunnels += Tunnel(start, end)
+                val top = Random.nextInt(bottom + 1 until limit)
+                tunnels += Tunnel(bottom, top)
 
-                occupiedSquares += end
+                occupiedSquares += bottom
             }
 
             for (i in 0 until numSnakes) {
-                var start = Random.nextInt(3 until limit)
-                while (occupiedSquares.contains(start)) {
-                    start = Random.nextInt(3 until limit)
+                var head = Random.nextInt(3 until limit)
+                while (occupiedSquares.contains(head)) {
+                    head = Random.nextInt(3 until limit)
                 }
-                val end = Random.nextInt(2 until start)
-                tunnels += Tunnel(start, end)
+                val tail = Random.nextInt(2 until head)
+                tunnels += Tunnel(head, tail)
 
-                occupiedSquares += start
+                occupiedSquares += head
             }
 
             return tunnels
