@@ -7,6 +7,7 @@ class SnakesAndLaddersGame(
     private val tunnels: Set<Tunnel>
     internal val ladders: List<Tunnel>
     internal val snakes: List<Tunnel>
+    internal val players: List<Player>
 
     init {
         if (numPlayers < 1) throw IllegalArgumentException("should have at least 1 player")
@@ -17,5 +18,6 @@ class SnakesAndLaddersGame(
         this.tunnels = Tunnel.make(numLadders, numSnakes, numSquares)
         this.ladders = tunnels.filter { it.type == TunnelType.LADDER }
         this.snakes = tunnels.filter { it.type == TunnelType.SNAKE }
+        this.players = Player.make(numPlayers)
     }
 }

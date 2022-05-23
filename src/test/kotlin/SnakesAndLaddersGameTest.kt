@@ -11,6 +11,7 @@ internal class SnakesAndLaddersGameTest {
         assertEquals(game.numLadders, 5)
         assertEquals(game.numSnakes, 5)
         assertEquals(game.numPlayers, 2)
+        assertEquals(game.players.size, 2)
     }
 
     @Test
