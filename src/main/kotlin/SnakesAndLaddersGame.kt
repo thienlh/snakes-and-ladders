@@ -4,7 +4,11 @@ class SnakesAndLaddersGame(
     internal val numSnakes: Int,
     internal val numPlayers: Int
 ) {
-    private val tunnels: Set<Tunnel>
+    internal constructor(numSquares: Int, tunnels: Set<Tunnel>) : this(numSquares, 0, 0, 1) {
+       this.tunnels = tunnels
+    }
+
+    private var tunnels: Set<Tunnel>
     internal val ladders: List<Tunnel>
     internal val snakes: List<Tunnel>
     internal val players: List<Player>
@@ -27,7 +31,18 @@ class SnakesAndLaddersGame(
     fun nextMove() {
         val player = players[nextPlayerIndex]
         val move = Move(player)
+        move(move)
+    }
+
+    internal fun move(move: Move) {
+        val player = move.player
         player.advance(move.rolledNumber)
+
+        while (tunnels.any { it.start == player.currentPosition }) {
+            val tunnel = tunnels.find { it.start == player.currentPosition }
+            player.moveTo(tunnel!!.end)
+        }
+
         moves += move
         if (nextPlayerIndex == numPlayers - 1) nextPlayerIndex = 0 else nextPlayerIndex++
     }

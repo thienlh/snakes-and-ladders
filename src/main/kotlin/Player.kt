@@ -1,7 +1,11 @@
 data class Player(val name: String) {
     fun advance(num: Int) {
-        if (num !in 1..6) throw IllegalArgumentException("can only advance within a dice roll range 1..6")
+        if (num < 1) throw IllegalArgumentException("can only advance in positive step")
         currentPosition += num
+    }
+
+    fun moveTo(num: Int) {
+        currentPosition = num
     }
 
     var currentPosition: Int = 1

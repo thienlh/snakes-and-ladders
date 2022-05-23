@@ -27,6 +27,5 @@ internal class PlayerTest {
         assertEquals(player.currentPosition, 6)
         assertThrows<IllegalArgumentException> { player.advance(-3)  }
         assertThrows<IllegalArgumentException> { player.advance(0)  }
-        assertThrows<IllegalArgumentException> { player.advance(7)  }
     }
 }
