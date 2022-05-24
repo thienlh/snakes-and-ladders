@@ -37,7 +37,7 @@ class SnakesAndLaddersGame(
         this.ladders = tunnels.filter { it.type == TunnelType.LADDER }
         this.snakes = tunnels.filter { it.type == TunnelType.SNAKE }
         this.moves = mutableListOf()
-        println("Game generated with $numSquares squares, ${players.size} players ($players), $numLadders ladders ($ladders), $numSnakes snakes ($snakes)")
+        println("Game generated with $numSquares squares, ${players.size} players (${players.map { it.name }}), $numLadders ladders ($ladders), $numSnakes snakes ($snakes)")
     }
 
     fun nextMove() {
