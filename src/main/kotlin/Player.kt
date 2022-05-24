@@ -6,7 +6,7 @@ data class Player(val name: String) {
         println("$name moved from [$lastPosition] to [$currentPosition]")
     }
 
-    fun moveTo(num: Int) {
+    fun travelTo(num: Int) {
         val lastPosition = currentPosition
         currentPosition = num
         println("$name moved from [$lastPosition] to [$currentPosition]")

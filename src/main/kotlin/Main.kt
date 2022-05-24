@@ -4,10 +4,18 @@ fun main(args: Array<String>) {
         return
     }
     if (args.size < 4) throw IllegalArgumentException("Not enough arguments. Call with :h for help")
-    if (args.size == 4) {
-        val game = SnakesAndLaddersGame(args[0].toInt(), args[1].toInt(), args[2].toInt(), args[3].toInt())
-        while (game.winner == null) {
-            game.nextMove()
-        }
+
+    val numSquares = args[0].toInt()
+    val numLadders = args[1].toInt()
+    val numSnakes = args[2].toInt()
+    val game: SnakesAndLaddersGame = if (args.size == 4) {
+        val numPlayers = args[3].toInt()
+        SnakesAndLaddersGame(numSquares, numLadders, numSnakes, numPlayers)
+    } else {
+        SnakesAndLaddersGame(numSquares, numLadders, numSnakes, args.drop(3).map { Player(it) })
+    }
+
+    while (game.winner == null) {
+        game.nextMove()
     }
 }

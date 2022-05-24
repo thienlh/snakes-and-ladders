@@ -5,22 +5,30 @@ class SnakesAndLaddersGame(
     internal val numSquares: Int,
     internal val numLadders: Int,
     internal val numSnakes: Int,
-    internal val numPlayers: Int
+    internal val players: List<Player>
 ) {
-    internal constructor(numSquares: Int, tunnels: Set<Tunnel>) : this(numSquares, 0, 0, 1) {
+    internal constructor(numSquares: Int, tunnels: Set<Tunnel>, players: List<Player>) : this(
+        numSquares, 0, 0, players
+    ) {
         this.tunnels = tunnels
+    }
+
+    constructor(numSquares: Int, numLadders: Int, numSnakes: Int, numPlayers: Int) : this(
+        numSquares, numLadders, numSnakes, Player.make(numPlayers)
+    ) {
+        if (numPlayers < 1) throw IllegalArgumentException("should have at least 1 player")
     }
 
     private var tunnels: Set<Tunnel>
     internal val ladders: List<Tunnel>
     internal val snakes: List<Tunnel>
-    internal val players: List<Player>
     internal val moves: MutableList<Move>
-    private var nextPlayerIndex = 0
+    internal var nextPlayerIndex = 0
+    private var numRounds = 1
     var winner: Player? = null
+    private val numPlayers = players.size
 
     init {
-        if (numPlayers < 1) throw IllegalArgumentException("should have at least 1 player")
         if (numSquares < 10) throw IllegalArgumentException("should have at least 10 squares")
         if (numLadders < 0) throw IllegalArgumentException("should not have negative numLadders")
         if (numSnakes < 0) throw IllegalArgumentException("should not have negative numSnakes")
@@ -28,9 +36,8 @@ class SnakesAndLaddersGame(
         this.tunnels = Tunnel.make(numLadders, numSnakes, numSquares)
         this.ladders = tunnels.filter { it.type == TunnelType.LADDER }
         this.snakes = tunnels.filter { it.type == TunnelType.SNAKE }
-        this.players = Player.make(numPlayers)
         this.moves = mutableListOf()
-        println("Game generated with $numSquares squares, $numPlayers players ($players), $numLadders ladders ($ladders), $numSnakes snakes ($snakes)")
+        println("Game generated with $numSquares squares, ${players.size} players ($players), $numLadders ladders ($ladders), $numSnakes snakes ($snakes)")
     }
 
     fun nextMove() {
@@ -41,33 +48,67 @@ class SnakesAndLaddersGame(
         move(move)
     }
 
+    // TODO: Consider letting Player class handles the moving logic, this class should only handles cycle between players
     internal fun move(move: Move) {
         val player = move.player
-        if (player.currentPosition + move.rolledNumber > numSquares) {
-            println("${player.name} rolled [${move.rolledNumber}], but need a [${numSquares - player.currentPosition}] to win the game.")
+        val rolledNumber = move.rolledNumber
+        val rolledMoreThanNeededToWin = player.currentPosition + rolledNumber > numSquares
+
+        if (rolledMoreThanNeededToWin) {
+            println("${player.name} rolled [$rolledNumber], but need a [${numSquares - player.currentPosition}] to win the game.")
+            proceedRound()
             return
         } else {
-            player.advance(move.rolledNumber)
+            player.advance(rolledNumber)
         }
 
-        while (tunnels.any { it.start == player.currentPosition }) {
-            val tunnel = tunnels.find { it.start == player.currentPosition }!!
-            when (tunnel.type) {
-                TunnelType.SNAKE -> println("Oops! ${player.name} got eaten by a snake ($tunnel)")
-                TunnelType.LADDER -> println("Yay! ${player.name} climbed a ladder ($tunnel)")
-            }
-            player.moveTo(tunnel.end)
-        }
+        while (player.cameAcrossATunnel()) player.travel()
 
-        moves += move
+        record(move)
 
-        if (player.currentPosition == numSquares) {
+        if (player.hasWon()) {
             winner = player
             println("${player.name} won!")
-            println("Game finished after ${moves.size} moves.")
+            println("Game finished after $numRounds rounds.")
             return
         }
 
-        if (nextPlayerIndex == numPlayers - 1) nextPlayerIndex = 0 else nextPlayerIndex++
+        proceedRound()
+    }
+
+    private fun proceedRound() {
+        when {
+            isEndOfRound() -> startANewRound()
+            else -> nextPlayer()
+        }
+    }
+
+    private fun record(move: Move) {
+        moves += move
+    }
+
+    private fun Player.hasWon() = currentPosition == numSquares
+
+    private fun Player.cameAcrossATunnel() = tunnels.any { it.start == currentPosition }
+
+    private fun Player.travel() {
+        val tunnel = tunnels.find { it.start == currentPosition }!!
+        when (tunnel.type) {
+            TunnelType.SNAKE -> println("Oops! $name got eaten by a snake ($tunnel)")
+            TunnelType.LADDER -> println("Yay! $name climbed a ladder ($tunnel)")
+        }
+        travelTo(tunnel.end)
+    }
+
+    private fun isEndOfRound() = nextPlayerIndex == numPlayers - 1
+
+    private fun startANewRound() {
+        nextPlayerIndex = 0
+        numRounds++
+    }
+
+    private fun nextPlayer() {
+        nextPlayerIndex++
     }
 }
+

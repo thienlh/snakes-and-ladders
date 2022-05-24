@@ -7,9 +7,9 @@ internal class TunnelTest {
     @Test
     internal fun `should make correct number of ladders and snakes`() {
         val tunnels = Tunnel.make(2, 3, 50)
-        assertEquals(tunnels.size, 5)
-        assertEquals(tunnels.filter { it.type == TunnelType.LADDER }.size, 2)
-        assertEquals(tunnels.filter { it.type == TunnelType.SNAKE }.size, 3)
+        assertEquals(5, tunnels.size)
+        assertEquals(2, tunnels.filter { it.type == TunnelType.LADDER }.size)
+        assertEquals(3, tunnels.filter { it.type == TunnelType.SNAKE }.size)
     }
 
     @Test
