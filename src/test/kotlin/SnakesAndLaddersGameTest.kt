@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 internal class SnakesAndLaddersGameTest {
@@ -107,5 +108,30 @@ internal class SnakesAndLaddersGameTest {
 
         game.move(Move(player, 4))
         assertEquals(player.currentPosition, 2)
+    }
+
+    @Test
+    internal fun `should be able to win`() {
+        val game = SnakesAndLaddersGame(10, setOf(Tunnel(3, 4), Tunnel(8, 2)))
+        assertNull(game.winner)
+
+        val player = game.players[0]
+        game.move(Move(player, 6))
+        game.move(Move(player, 3))
+
+        assertEquals(game.winner, player)
+        assertEquals(game.winner!!.currentPosition, 10)
+    }
+
+    @Test
+    internal fun `should roll exactly the right number for the final move`() {
+        val game = SnakesAndLaddersGame(10, setOf(Tunnel(3, 4), Tunnel(8, 2)))
+
+        val player = game.players[0]
+        game.move(Move(player, 6))
+        game.move(Move(player, 6))
+
+        assertNull(game.winner)
+        assertEquals(player.currentPosition, 7)
     }
 }

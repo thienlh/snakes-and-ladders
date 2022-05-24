@@ -1,3 +1,6 @@
+import kotlin.random.Random
+import kotlin.random.nextInt
+
 class SnakesAndLaddersGame(
     internal val numSquares: Int,
     internal val numLadders: Int,
@@ -5,7 +8,7 @@ class SnakesAndLaddersGame(
     internal val numPlayers: Int
 ) {
     internal constructor(numSquares: Int, tunnels: Set<Tunnel>) : this(numSquares, 0, 0, 1) {
-       this.tunnels = tunnels
+        this.tunnels = tunnels
     }
 
     private var tunnels: Set<Tunnel>
@@ -14,6 +17,7 @@ class SnakesAndLaddersGame(
     internal val players: List<Player>
     internal val moves: MutableList<Move>
     private var nextPlayerIndex = 0
+    var winner: Player? = null
 
     init {
         if (numPlayers < 1) throw IllegalArgumentException("should have at least 1 player")
@@ -30,21 +34,31 @@ class SnakesAndLaddersGame(
 
     fun nextMove() {
         val player = players[nextPlayerIndex]
-        val move = Move(player)
+        val move = Move(player, Random.nextInt(1..6))
         move(move)
     }
 
     internal fun move(move: Move) {
         val player = move.player
-        player.advance(move.rolledNumber)
+        if (player.currentPosition + move.rolledNumber > numSquares) {
+            return
+        } else {
+            player.advance(move.rolledNumber)
+        }
 
+        // TODO: refactoring
         while (tunnels.any { it.start == player.currentPosition }) {
             val tunnel = tunnels.find { it.start == player.currentPosition }
             player.moveTo(tunnel!!.end)
         }
 
         moves += move
+
+        if (player.currentPosition == numSquares) {
+            winner = player
+            return
+        }
+
         if (nextPlayerIndex == numPlayers - 1) nextPlayerIndex = 0 else nextPlayerIndex++
     }
-
 }
