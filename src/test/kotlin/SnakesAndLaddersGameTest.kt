@@ -55,7 +55,7 @@ internal class SnakesAndLaddersGameTest {
 
     @Test
     internal fun `should advance the game`() {
-        val game = SnakesAndLaddersGame(100, 2, 5, 2)
+        val game = SnakesAndLaddersGame(10, 0, 0, 2)
         assertEquals(game.moves.size, 0)
 
         game.nextMove()
@@ -88,5 +88,24 @@ internal class SnakesAndLaddersGameTest {
         val player = game.players[0]
         game.move(Move(player, 2))
         assertEquals(player.currentPosition, 8)
+    }
+
+    @Test
+    internal fun `should get eaten by snakes`() {
+        val game = SnakesAndLaddersGame(10, setOf(Tunnel(4, 2)))
+        val player = game.players[0]
+        game.move(Move(player, 3))
+        assertEquals(player.currentPosition, 2)
+    }
+
+    @Test
+    internal fun `should travel any tunnels`() {
+        val game = SnakesAndLaddersGame(10, setOf(Tunnel(3, 4), Tunnel(8, 2)))
+        val player = game.players[0]
+        game.move(Move(player, 2))
+        assertEquals(player.currentPosition, 4)
+
+        game.move(Move(player, 4))
+        assertEquals(player.currentPosition, 2)
     }
 }
