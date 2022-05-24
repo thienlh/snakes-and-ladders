@@ -1,11 +1,15 @@
 data class Player(val name: String) {
     fun advance(num: Int) {
+        val lastPosition = currentPosition
         if (num < 1) throw IllegalArgumentException("can only advance in positive step")
         currentPosition += num
+        println("$name moved from [$lastPosition] to [$currentPosition]")
     }
 
     fun moveTo(num: Int) {
+        val lastPosition = currentPosition
         currentPosition = num
+        println("$name moved from [$lastPosition] to [$currentPosition]")
     }
 
     var currentPosition: Int = 1

@@ -30,39 +30,41 @@ class SnakesAndLaddersGame(
         this.snakes = tunnels.filter { it.type == TunnelType.SNAKE }
         this.players = Player.make(numPlayers)
         this.moves = mutableListOf()
+        println("Game generated with $numSquares squares, $numPlayers players ($players), $numLadders ladders ($ladders), $numSnakes snakes ($snakes)")
     }
 
     fun nextMove() {
         val player = players[nextPlayerIndex]
-        val move = Move(player, Random.nextInt(1..6))
+        val rolledNumber = Random.nextInt(1..6)
+        println("${player.name} (${player.currentPosition}) rolled [$rolledNumber]")
+        val move = Move(player, rolledNumber)
         move(move)
     }
 
     internal fun move(move: Move) {
         val player = move.player
-        val lastPosition = player.currentPosition
         if (player.currentPosition + move.rolledNumber > numSquares) {
-            println("Player ${player.name} rolled [${move.rolledNumber}], but need a [${numSquares - player.currentPosition}] to win the game.")
+            println("${player.name} rolled [${move.rolledNumber}], but need a [${numSquares - player.currentPosition}] to win the game.")
             return
         } else {
             player.advance(move.rolledNumber)
         }
 
         while (tunnels.any { it.start == player.currentPosition }) {
-            val tunnel = tunnels.find { it.start == player.currentPosition }
-            player.moveTo(tunnel!!.end)
+            val tunnel = tunnels.find { it.start == player.currentPosition }!!
             when (tunnel.type) {
-                TunnelType.SNAKE -> println("Oops! Player ${player.name} got eaten by a snake")
-                TunnelType.LADDER -> println("Player ${player.name} climbed a ladder")
+                TunnelType.SNAKE -> println("Oops! ${player.name} got eaten by a snake ($tunnel)")
+                TunnelType.LADDER -> println("Yay! ${player.name} climbed a ladder ($tunnel)")
             }
+            player.moveTo(tunnel.end)
         }
 
         moves += move
-        println("Player ${move.player.name} moved from [$lastPosition] to [${move.player.currentPosition}]")
 
         if (player.currentPosition == numSquares) {
             winner = player
-            println("Player ${player.name} won!")
+            println("${player.name} won!")
+            println("Game finished after ${moves.size} moves.")
             return
         }
 
