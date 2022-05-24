@@ -51,6 +51,10 @@ class SnakesAndLaddersGame(
         while (tunnels.any { it.start == player.currentPosition }) {
             val tunnel = tunnels.find { it.start == player.currentPosition }
             player.moveTo(tunnel!!.end)
+            when (tunnel.type) {
+                TunnelType.SNAKE -> println("Oops! Player ${player.name} got eaten by a snake")
+                TunnelType.LADDER -> println("Player ${player.name} climbed a ladder")
+            }
         }
 
         moves += move
