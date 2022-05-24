@@ -56,7 +56,7 @@ internal class SnakesAndLaddersGameTest {
 
     @Test
     internal fun `should advance the game`() {
-        val game = SnakesAndLaddersGame(10, 0, 0, 2)
+        val game = SnakesAndLaddersGame(100, 0, 0, 2)
         assertEquals(game.moves.size, 0)
 
         game.nextMove()

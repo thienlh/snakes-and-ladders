@@ -40,22 +40,25 @@ class SnakesAndLaddersGame(
 
     internal fun move(move: Move) {
         val player = move.player
+        val lastPosition = player.currentPosition
         if (player.currentPosition + move.rolledNumber > numSquares) {
+            println("Player ${player.name} rolled [${move.rolledNumber}], but need a [${numSquares - player.currentPosition}] to win the game.")
             return
         } else {
             player.advance(move.rolledNumber)
         }
 
-        // TODO: refactoring
         while (tunnels.any { it.start == player.currentPosition }) {
             val tunnel = tunnels.find { it.start == player.currentPosition }
             player.moveTo(tunnel!!.end)
         }
 
         moves += move
+        println("Player ${move.player.name} moved from [$lastPosition] to [${move.player.currentPosition}]")
 
         if (player.currentPosition == numSquares) {
             winner = player
+            println("Player ${player.name} won!")
             return
         }
 
