@@ -1,7 +1,13 @@
 fun main(args: Array<String>) {
-    println("Hello World!")
-
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+    if (args.size == 1 && args[0] == "h") {
+        println("Syntax:\n[numSquares] [numLadders] [numSnakes] [numPlayers] for default player names.\n[numSquares] [numLadders] [numSnakes] [Player name 1] [Player name 2]...\n")
+        return
+    }
+    if (args.size < 4) throw IllegalArgumentException("Not enough arguments. Call with :h for help")
+    if (args.size == 4) {
+        val game = SnakesAndLaddersGame(args[0].toInt(), args[1].toInt(), args[2].toInt(), args[3].toInt())
+        while (game.winner == null) {
+            game.nextMove()
+        }
+    }
 }
