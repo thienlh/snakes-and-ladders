@@ -1,26 +1,24 @@
 data class Player(val name: String) {
-    fun advance(num: Int) {
-        val lastPosition = currentPosition
-        if (num < 1) throw IllegalArgumentException("can only advance in positive step")
-        currentPosition += num
-        println("$name moved from [$lastPosition] to [$currentPosition]")
-    }
-
-    fun travelTo(num: Int) {
-        val lastPosition = currentPosition
-        currentPosition = num
-        println("$name moved from [$lastPosition] to [$currentPosition]")
-    }
-
+    // Every player starts at square 1
     var currentPosition: Int = 1
+
+    fun advance(numSteps: Int) {
+        if (numSteps < 1) throw IllegalArgumentException("can only advance in positive step")
+        val lastPosition = currentPosition
+        currentPosition += numSteps
+        println("$name moved from [$lastPosition] to [$currentPosition]")
+    }
+
+    fun travelTo(squareNum: Int) {
+        if (squareNum < 1) throw IllegalArgumentException("can only travel to positive square")
+        val lastPosition = currentPosition
+        currentPosition = squareNum
+        println("$name moved from [$lastPosition] to [$currentPosition]")
+    }
 
     companion object {
         fun make(num: Int): List<Player> {
-            val players = mutableListOf<Player>()
-            for (i in 0 until num) {
-                players += Player("Player ${i + 1}")
-            }
-            return players
+            return IntRange(1, num).map { Player("Player $it") }
         }
     }
 

@@ -16,6 +16,6 @@ fun main(args: Array<String>) {
     }
 
     while (game.winner == null) {
-        game.nextMove()
+        game.advance()
     }
 }

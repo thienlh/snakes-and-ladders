@@ -66,7 +66,7 @@ internal class SnakesAndLaddersGameTest {
         val game = SnakesAndLaddersGame(100, 0, 0, 2)
         assertEquals(0, game.moves.size)
 
-        game.nextMove()
+        game.advance()
 
         assertEquals(1, game.moves.size)
 
@@ -75,10 +75,10 @@ internal class SnakesAndLaddersGameTest {
         assertTrue(move.rolledNumber in 1..6)
         assertEquals(move.rolledNumber + 1, game.players[0].currentPosition)
 
-        game.nextMove()
+        game.advance()
         assertEquals(Player("Player 2"), game.moves[1].player)
 
-        game.nextMove()
+        game.advance()
         assertEquals(Player("Player 1"), game.moves[2].player)
     }
 

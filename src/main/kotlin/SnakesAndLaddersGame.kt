@@ -1,3 +1,5 @@
+import TunnelType.LADDER
+import TunnelType.SNAKE
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -22,7 +24,7 @@ class SnakesAndLaddersGame(
     private var tunnels: Set<Tunnel>
     internal val ladders: List<Tunnel>
     internal val snakes: List<Tunnel>
-    internal val moves: MutableList<Move>
+    internal val moves: MutableList<Move> = mutableListOf()
     internal var nextPlayerIndex = 0
     private var numRounds = 1
     var winner: Player? = null
@@ -34,21 +36,18 @@ class SnakesAndLaddersGame(
         if (numSnakes < 0) throw IllegalArgumentException("should not have negative numSnakes")
         if ((numLadders + numSnakes) * 2 >= numSquares - 2) throw IllegalArgumentException("(numSnakes + numLadders) * 2 must be smaller than numSquares - 2")
         this.tunnels = Tunnel.make(numLadders, numSnakes, numSquares)
-        this.ladders = tunnels.filter { it.type == TunnelType.LADDER }
-        this.snakes = tunnels.filter { it.type == TunnelType.SNAKE }
-        this.moves = mutableListOf()
+        this.ladders = tunnels.filter { it.type == LADDER }
+        this.snakes = tunnels.filter { it.type == SNAKE }
         println("Game generated with $numSquares squares, ${players.size} players (${players.map { it.name }}), $numLadders ladders ($ladders), $numSnakes snakes ($snakes)")
     }
 
-    fun nextMove() {
+    fun advance() {
         val player = players[nextPlayerIndex]
         val rolledNumber = Random.nextInt(1..6)
         println("${player.name} (${player.currentPosition}) rolled [$rolledNumber]")
-        val move = Move(player, rolledNumber)
-        move(move)
+        move(Move(player, rolledNumber))
     }
 
-    // TODO: Consider letting Player class handles the moving logic, this class should only handles cycle between players
     internal fun move(move: Move) {
         val player = move.player
         val rolledNumber = move.rolledNumber
@@ -94,8 +93,8 @@ class SnakesAndLaddersGame(
     private fun Player.travel() {
         val tunnel = tunnels.find { it.start == currentPosition }!!
         when (tunnel.type) {
-            TunnelType.SNAKE -> println("Oops! $name got eaten by a snake ($tunnel)")
-            TunnelType.LADDER -> println("Yay! $name climbed a ladder ($tunnel)")
+            SNAKE -> println("Oops! $name got eaten by a snake ($tunnel)")
+            LADDER -> println("Yay! $name climbed a ladder ($tunnel)")
         }
         travelTo(tunnel.end)
     }

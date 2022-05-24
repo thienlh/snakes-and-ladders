@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 
 internal class TunnelTest {
@@ -30,5 +31,10 @@ internal class TunnelTest {
         val snakeHeads = tunnels.filter { it.type == TunnelType.SNAKE }.map { it.start }
 
         assertTrue(Collections.disjoint(ladderBottoms, snakeHeads))
+    }
+
+    @Test
+    internal fun `should reject start equals end`() {
+        assertThrows<IllegalArgumentException> { Tunnel(1, 1) }
     }
 }

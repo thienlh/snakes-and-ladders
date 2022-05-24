@@ -30,9 +30,12 @@ internal class PlayerTest {
     }
 
     @Test
-    internal fun `should travel to any square`() {
+    internal fun `should travel to any positive square`() {
         val player = Player("a player")
         player.travelTo(100)
         assertEquals(100, player.currentPosition)
+
+        assertThrows<IllegalArgumentException> { player.travelTo(-3) }
+        assertThrows<IllegalArgumentException> { player.travelTo(0) }
     }
 }
