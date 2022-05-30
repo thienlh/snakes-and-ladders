@@ -1,8 +1,11 @@
-# Snakes and Ladders Game
+# Snakes and Ladders
 
-Implementation for Snakes and Ladders game.
+An implementation of the [Snakes and Ladders board game](https://en.wikipedia.org/wiki/Snakes_and_ladders).
 
-## Build
+[![Snakes and Ladders.jpg](https://upload.wikimedia.org/wikipedia/commons/a/a7/Snakes_and_Ladders.jpg)](https://commons.wikimedia.org/wiki/File:Snakes_and_Ladders.jpg#/media/File:Snakes_and_Ladders.jpg)  
+By Jain Miniature - <a rel="nofollow" class="external free" href="http://www.herenow4u.net/index.php?id=72923">http://www.herenow4u.net/index.php?id=72923, Public Domain, [Link](https://commons.wikimedia.org/w/index.php?curid=11471979)
+
+## Build and running tests
 
 For testing, please run:
 
@@ -16,7 +19,7 @@ For building, please run:
 ./gradlew build
 ```
 
-## Running the MVP game via command line
+## Running the game via command line
 
 Run with `h` option for help.
 
@@ -42,4 +45,8 @@ names.
 
 will generate a game with the same structure with the first example, but using custom player names.
 
-
+<style>
+    img {
+        width: 250px;
+    }
+</style>
