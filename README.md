@@ -44,9 +44,3 @@ names.
 ```
 
 will generate a game with the same structure with the first example, but using custom player names.
-
-<style>
-    img {
-        width: 250px;
-    }
-</style>
